@@ -8,10 +8,9 @@
 
 namespace App\Abstracts;
 
-
-interface APInterface
+interface APInterface extends ServiceInterface
 {
-    public function getAmountFromSymbol(string $symbol): float ;
+    public function getAmountFromSymbol(string $symbol): float;
 
     public function getUsd(): float;
 

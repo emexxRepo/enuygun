@@ -9,9 +9,9 @@
 namespace App\Abstracts;
 
 
-interface APITRInterface
+interface APITRInterface extends ServiceInterface
 {
-    public function getirKod(string $symbol): float ;
+    public function getirKod(string $symbol): float;
 
     public function getirDolar(): float;
 

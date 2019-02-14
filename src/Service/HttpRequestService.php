@@ -14,6 +14,9 @@ class HttpRequestService
 {
     private $client;
 
+    private $data = [];
+
+
     //KUSURA BAKMAYIN GUZZLE DEPENDENCY INJECTION YAPAMADIM ÇOK AZ SYMFONY BİLİYORUM
 
     /**
@@ -23,7 +26,7 @@ class HttpRequestService
     {
         $this->client =  new Client([
             'base_uri' => 'http://www.mocky.io/v2/',
-            'timeout'  => 2.0,
+            'timeout'  => 5.5,
         ]);
     }
 
@@ -34,8 +37,15 @@ class HttpRequestService
      */
     public function getData(string $url): array
     {
-        $response = $this->client->request('GET', $url);
-        return \GuzzleHttp\json_decode($response->getBody(),true);
+        $promise = $this->client->request('GET', $url);
+        return \GuzzleHttp\json_decode($promise->getBody(),true);
+
+        /*$promise = $this->client->requestAsync('GET',$url)->then(function (Response $response) {
+             $this->data =  \GuzzleHttp\json_decode($response->getBody(),true);
+        });
+        $promise->wait();
+        return $this->data;*/
+
     }
 
 }
