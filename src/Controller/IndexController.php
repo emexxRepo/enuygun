@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Adapter\TRMoneyAdapter;
+use App\Repository\ExchangeRateRepository;
 use App\Service\MoneyServiceEnglish;
 use App\Service\MoneyServiceTurkish;
 use App\Service\MoneyServiceTurkishv2;
@@ -14,27 +15,16 @@ class IndexController extends AbstractController
 {
 
     /**
-     * @Route("/provider1", name="p1")
+     * @Route("/index", name="index")
      */
-    public function index(MoneyServiceEnglish $service,MoneyServiceTurkish $trservice)
+    public function index(ExchangeRateRepository $exchangeRateRepository)
     {
-        echo "<hr>";
-        $service->setProvider('5a74519d2d0000430bfe0fa0');
-        var_dump($service->getUsd());
-        var_dump($service->getGbp());
-        var_dump($service->getEuro());
-        echo "<hr>";
-        $trservice->varsayilanSaglayici('5a74524e2d0000430bfe0fa3');
-        echo "<hr>";
-        var_dump($trservice->getirKod('AVRO'));
-        var_dump($trservice->getirKod('İNGİLİZ STERLİNİ'));
-        var_dump($trservice->getirKod('DOLAR'));
-        echo "<hr>";
+        $exChangeRates = $exchangeRateRepository->findAll();
 
-        echo "<hr> <br> <h1>TEST</h1>";
-        echo "<hr>";
-        return new Response('');
-        }
+        return $this->render('index/index.html.twig',[
+           'exChangeRates' => $exChangeRates
+        ]);
+    }
 
      /**
      * @Route("/provider2", name="provider2")

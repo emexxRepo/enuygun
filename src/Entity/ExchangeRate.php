@@ -26,6 +26,11 @@ class ExchangeRate
      */
     private $value;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $service;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +56,18 @@ class ExchangeRate
     public function setValue(float $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getService(): ?string
+    {
+        return $this->service;
+    }
+
+    public function setService(string $service): self
+    {
+        $this->service = $service;
 
         return $this;
     }

@@ -23,19 +23,25 @@ class ComparisonService
         $this->setTempData();
 
         foreach ($this->services as $key => $service) {
+            if ($key === 'trService1')
+                continue;
 
-            if ($service->getUsd() < $this->cheapsets['usd']){
-                $this->cheapsets['usd'] = $service->getUsd();
-            }
+            foreach ($this->cheapsets as $keyCheapsets => $cheapsets) {
 
-            if ($service->getEuro() < $this->cheapsets['euro']){
-                $this->cheapsets['euro'] = $service->getEuro();
-                $this->cheapsets['eurofrom'] = $key;
-            }
+                if ($cheapsets['name'] === 'usd' && $service->getUsd() < $cheapsets['value']) {
+                    $this->cheapsets[$keyCheapsets]['value'] = $service->getUsd();
+                    $this->cheapsets[$keyCheapsets]['from'] = $key;
+                }
 
-            if ($service->getGbp() < $this->cheapsets['gbp']){
-                $this->cheapsets['gbp'] = $service->getGbp();
-                $this->cheapsets['gbpfrom'] = $key;
+                if ($cheapsets['name'] === 'gbp' && $service->getUsd() < $cheapsets['value']) {
+                    $this->cheapsets[$keyCheapsets]['value'] = $service->getGbp();
+                    $this->cheapsets[$keyCheapsets]['from'] = $key;
+                }
+
+                if ($cheapsets['name'] === 'euro' && $service->getUsd() < $cheapsets['value']) {
+                    $this->cheapsets[$keyCheapsets]['value'] = $service->getEuro();
+                    $this->cheapsets[$keyCheapsets]['from'] = $key;
+                }
             }
 
         }
@@ -45,24 +51,40 @@ class ComparisonService
 
     private function setTempData(): void
     {
-        $this->cheapsets['usd'] = $this->services['trService1']->getUsd();
-        $this->cheapsets['usdfrom'] = 'trService1';
-        $this->cheapsets['euro'] = $this->services['trService1']->getEuro();
-        $this->cheapsets['eurofrom'] = 'trService1';
-        $this->cheapsets['gbp'] = $this->services['trService1']->getGbp();
-        $this->cheapsets['gbpfrom'] = 'trService1';
+        $this->cheapsets[] = ['name' => 'usd', 'value' => $this->services['trService1']->getUsd(), 'from' => 'trService1'];
+        $this->cheapsets[] = ['name' => 'euro', 'value' => $this->services['trService1']->getEuro(), 'from' => 'trService1'];
+        $this->cheapsets[] = ['name' => 'gbp', 'value' => $this->services['trService1']->getGbp(), 'from' => 'trService1'];
 
     }
 
     public function setServices(array $services): void
     {
-        if(!empty($services)){
-            foreach ($services as $key => $service){
-                if (!($service instanceof ServiceInterface)){
+        if (!empty($services)) {
+            foreach ($services as $key => $service) {
+                if (!($service instanceof ServiceInterface)) {
                     throw new \Exception('Has to implement Service Interface');
                 }
             }
         }
         $this->services = $services;
+    }
+
+
+    public function other()
+    {
+
+        if ($service->getUsd() < $this->cheapsets['usd']) {
+            $this->cheapsets['usd'] = $service->getUsd();
+        }
+
+        if ($service->getEuro() < $this->cheapsets['euro']) {
+            $this->cheapsets['euro'] = $service->getEuro();
+            $this->cheapsets['eurofrom'] = $key;
+        }
+
+        if ($service->getGbp() < $this->cheapsets['gbp']) {
+            $this->cheapsets['gbp'] = $service->getGbp();
+            $this->cheapsets['gbpfrom'] = $key;
+        }
     }
 }
