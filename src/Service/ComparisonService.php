@@ -70,21 +70,5 @@ class ComparisonService
     }
 
 
-    public function other()
-    {
-
-        if ($service->getUsd() < $this->cheapsets['usd']) {
-            $this->cheapsets['usd'] = $service->getUsd();
-        }
-
-        if ($service->getEuro() < $this->cheapsets['euro']) {
-            $this->cheapsets['euro'] = $service->getEuro();
-            $this->cheapsets['eurofrom'] = $key;
-        }
-
-        if ($service->getGbp() < $this->cheapsets['gbp']) {
-            $this->cheapsets['gbp'] = $service->getGbp();
-            $this->cheapsets['gbpfrom'] = $key;
-        }
-    }
+   
 }
